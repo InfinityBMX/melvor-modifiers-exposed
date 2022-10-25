@@ -1,0 +1,5 @@
+{
+  "namespace": "modsExposed",
+  "setup": "src/setup.mjs",
+  "load": ["src/templates.html"]
+}
