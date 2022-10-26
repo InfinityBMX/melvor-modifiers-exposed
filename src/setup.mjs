@@ -1,59 +1,70 @@
 // setup.mjs
-export function setup(ctx) {
+export async function setup(ctx) {
+  // import modules
+  const combat = await ctx.loadModule('src/combat.mjs');
+  const fishing = await ctx.loadModule('src/fishing.mjs');
+
+  // load styles
+  ctx.loadStylesheet('src/templates/styles.css');
+
+  //
+  const { Combat, getCombatHost, getCombatModifiers } = combat;
+  const { Fishing, getFishingHost, getFishingModifiers } = fishing;
   // combat modifiers values and setters
-  let combatModifiers;
+  let combatModifiers,
+    fishingModifiers;
+  let combatMounted = false;
+  let fishingMounted = false;
 
   ctx.onInterfaceReady(ctx => {
-    // static selector for Stats box on combat screen
-    const statsTable = document.querySelector('#combat-fight-container-player > ' +
-      'div > ' +
-      'div.row.no-gutters > ' +
-      'div:nth-child(3) > ' +
-      'div > ' +
-      'div:nth-child(1) > ' +
-      'div');
+    // combat
+    combatModifiers = Combat(getCombatModifiers());
+    try {
+      let combatHost = getCombatHost();
+      ui.create(combatModifiers, combatHost);
+      combatMounted = true;
+    } catch (e) {
+      console.error(e);
+    }
 
-    combatModifiers = Combat(getCurrentModifiers())
-    ui.create(combatModifiers, statsTable);
+    // fishing
+    fishingModifiers = Fishing(getFishingModifiers());
+    try {
+      let fishingHost = getFishingHost();
+      ui.create(fishingModifiers, fishingHost);
+      fishingMounted = true;
+    } catch (e) {
+      console.error(e);
+    }
 
     // Update values when modifiers recalculated
     ctx.patch(Player, 'computeModifiers').after(() => {
-      combatModifiers.updateModifiers(getCurrentModifiers());
+      const modifiers = getCurrentModifiers();
+      if (combatMounted)
+        combatModifiers.updateModifiers(getCombatModifiers());
+      if (fishingMounted)
+        fishingModifiers.updateModifiers(getFishingModifiers());
     });
   })
 }
 
-function Combat(modifiers) {
-  return {
-    $template: '#combat-modifiers',
-    modifiers,
-    updateModifiers(newModifiers) {
-      this.modifiers = { ...this.modifiers, ...newModifiers }
-    }
-  }
-}
-
 function getCurrentModifiers() {
   const {
-    runePreservationChance,
-    combatLootDoubleChance,
-    increasedCombatGP,
-    ammoPreservationChance,
     getGPForDamageMultiplier // unbound method
-  } = game.combat.player.modifiers;
-  const boundGPMulti = getGPForDamageMultiplier.bind(game.combat.player.modifiers);
-
-  const meleeGPMulti = boundGPMulti('melee');
-  const rangedGPMulti = boundGPMulti('ranged');
-  const magicGPMulti = boundGPMulti('magic');
+  } = game.modifiers;
+  const boundGPMulti = getGPForDamageMultiplier.bind(game.modifiers);
 
   return {
-    runePreservationChance,
-    combatLootDoubleChance,
-    increasedCombatGP,
-    ammoPreservationChance,
-    meleeGPMulti,
-    rangedGPMulti,
-    magicGPMulti
+    meleeGPMulti: boundGPMulti('melee') / 10,
+    rangedGPMulti: boundGPMulti('ranged') / 10,
+    magicGPMulti: boundGPMulti('magic') / 10,
+    ammoPreservationChance: game.modifiers.ammoPreservationChance,
+    runePreservationChance: game.modifiers.runePreservationChance,
+    combatLootDoubleChance: game.modifiers.combatLootDoubleChance,
+    increasedCombatGP: game.modifiers.increasedCombatGP,
+    chanceForLostChest: game.fishing.chanceForLostChest,
+    chanceForExtraFish: game.fishing.chanceForOneExtraFish,
+    fishingMasteryModifier: game.fishing.getMasteryXPModifier(),
+    fishingXPModifier: game.fishing.getXPModifier()
   }
 }

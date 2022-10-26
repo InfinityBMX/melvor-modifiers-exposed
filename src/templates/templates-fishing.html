@@ -1,0 +1,49 @@
+<!-- templates-fishing.html -->
+<template id="fishing-modifiers">
+    <div class="col-12">
+        <div class="block block-rounded">
+            <div class="row no-gutters">
+                <div class="col-12">
+                    <div class="block-content block-content-full flexy nowrap content-justified">
+                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded">
+                            Chance for Minimum 2 Fish: {{ modifiers.base2Fish }}%
+                        </span>
+                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded">
+                            Chance to Double Items: {{ modifiers.doublingChance }}%
+                        </span>
+                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded">
+                            Rewards Doubled: {{ modifiers.doubleRewards }}
+                        </span>
+                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded">
+                            Extra Fish: {{ modifiers.chanceForExtraFish }}%
+                        </span>
+                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded">
+                            Max Fish per Action: {{ modifiers.maxReward }}
+                        </span>
+                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded">
+                            Fishing Mastery Bonus: {{ modifiers.fishingMasteryModifier }}%
+                        </span>
+                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded">
+                            Fishing XP Bonus: {{ modifiers.fishingXPModifier }}%
+                        </span>
+                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded"
+                              v-if="modifiers.circletChance > 0">
+                            Circlet of Rhaelex Chance: {{ modifiers.circletChance }}%
+                        </span>
+                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded"
+                              v-if="modifiers.stoneChance > 0">
+                            Mysterious Stone Chance: {{ modifiers.stoneChance }}%
+                        </span>
+                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded"
+                              v-if="modifiers.signetChance > 0">
+                            Signet Half A Chance: {{ modifiers.signetChance }}%
+                        </span>
+                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded">
+                            Lost Chests: {{ modifiers.chanceForLostChest }}%
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

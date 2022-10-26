@@ -1,5 +1,8 @@
 {
-  "namespace": "modsExposed",
   "setup": "src/setup.mjs",
-  "load": ["src/templates.html"]
+  "load": [
+    "src/templates/templates-combat.html",
+    "src/templates/templates-fishing.html",
+    "src/templates/styles.css"
+  ]
 }

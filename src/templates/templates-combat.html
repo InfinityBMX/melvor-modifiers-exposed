@@ -1,0 +1,34 @@
+<!-- templates-combat.html -->
+<template id="combat-modifiers">
+    <div class="col-12">
+        <div class="block block-rounded">
+            <div class="row no-gutters">
+                <div class="col-12">
+                    <div class="block-content block-content-full flexy nowrap content-justified">
+                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded">
+                            Rune Preservation: {{ modifiers.runePreservationChance }}%
+                        </span>
+                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded">
+                            Ammo Preservation: {{ modifiers.ammoPreservationChance }}%
+                        </span>
+                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded">
+                            Double Loot Chance: {{ modifiers.combatLootDoubleChance }}%
+                        </span>
+                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded">
+                            Increased Combat GP: {{ modifiers.increasedCombatGP }}%
+                        </span>
+                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded" v-if="modifiers.meleeGPMulti > 0">
+                            Melee Damage GP: {{ modifiers.meleeGPMulti }}%
+                        </span>
+                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded" v-if="modifiers.rangedGPMulti > 0">
+                            Ranged Damage GP: {{ modifiers.rangedGPMulti }}%
+                        </span>
+                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded" v-if="modifiers.magicGPMulti > 0">
+                            Magic Damage GP: {{ modifiers.magicGPMulti }}%
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

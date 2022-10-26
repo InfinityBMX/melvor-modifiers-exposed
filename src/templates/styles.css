@@ -1,0 +1,12 @@
+.flexy {
+    display: flex!important;
+    flex-wrap: wrap;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+.padded {
+    padding: 10px;
+}
