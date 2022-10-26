@@ -1,36 +1,51 @@
 <!-- templates-fishing.html -->
-<template id="fishing-modifiers">
+<template id="woodcutting-modifiers">
     <div class="col-12">
         <div class="block block-rounded">
             <div class="row no-gutters">
                 <div class="col-12">
                     <div class="block-content block-content-full flexy nowrap content-justified">
                         <span class="font-w400 font-size-sm mr-2 content-item text-success padded">
-                            Chance for Minimum 2 Fish: {{ modifiers.base2Fish }}%
+                            Bird Nest Chance: {{ modifiers.birdNestChance }}% (Base: {{ modifiers.birdNestBase }}%)
                         </span>
                         <span class="font-w400 font-size-sm mr-2 content-item text-success padded">
-                            Chance to Double Items: {{ modifiers.doublingChance }}%
+                            Bird Nest Quantity: {{ modifiers.birdNestQuantity }}
                         </span>
                         <span class="font-w400 font-size-sm mr-2 content-item text-success padded">
-                            Rewards Doubled: {{ modifiers.doubleRewards }}
+                            Raven Nest Chance: {{ modifiers.ravenNestChance }}% (Base: {{ modifiers.ravenNestBase }}%)
+                        </span>
+                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded"
+                              v-if="modifiers.stardustChance > 0">
+                            Stardust Chance: {{ modifiers.stardustChance }}%
+                        </span>
+                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded"
+                              v-if="modifiers.ashChance > 0">
+                            Ash Chance: {{ modifiers.ashChance }}%
+                        </span>
+                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded"
+                              v-if="modifiers.shaftChance > 0">
+                            Shaft Chance: {{ modifiers.shaftChance }}%
+                        </span>
+                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded"
+                              v-if="modifiers.gemChance > 0">
+                            Gem Chance: {{ modifiers.gemChance }}%
+                        </span>
+                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded"
+                              v-if="modifiers.jewelryChance > 0">
+                            Jewelry Chance: {{ modifiers.jewelryChance }}%
+                        </span>
+                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded"
+                              v-for="tree in modifiers.doublingChances">
+                            Chance to Double {{ tree.name }}: {{ tree.chance }}%
                         </span>
                         <span class="font-w400 font-size-sm mr-2 content-item text-success padded">
-                            Extra Fish: {{ modifiers.chanceForExtraFish }}%
+                            Logs Doubled: {{ modifiers.doubleLogs }}
                         </span>
                         <span class="font-w400 font-size-sm mr-2 content-item text-success padded">
-                            Extra Resource: {{ modifiers.extraResource }}
+                            Mastery Bonus: {{ modifiers.masteryModifier }}%
                         </span>
                         <span class="font-w400 font-size-sm mr-2 content-item text-success padded">
-                            Max Fish per Action: {{ modifiers.maxReward }}
-                        </span>
-                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded">
-                            Max Fish per Action: {{ modifiers.maxReward }}
-                        </span>
-                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded">
-                            Fishing Mastery Bonus: {{ modifiers.fishingMasteryModifier }}%
-                        </span>
-                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded">
-                            Fishing XP Bonus: {{ modifiers.fishingXPModifier }}%
+                            XP Bonus: {{ modifiers.xPModifier }}%
                         </span>
                         <span class="font-w400 font-size-sm mr-2 content-item text-success padded"
                               v-if="modifiers.circletChance > 0">
@@ -43,9 +58,6 @@
                         <span class="font-w400 font-size-sm mr-2 content-item text-success padded"
                               v-if="modifiers.signetChance > 0">
                             Signet Half A Chance: {{ modifiers.signetChance }}%
-                        </span>
-                        <span class="font-w400 font-size-sm mr-2 content-item text-success padded">
-                            Lost Chests: {{ modifiers.chanceForLostChest }}%
                         </span>
                     </div>
                 </div>

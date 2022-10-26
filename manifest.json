@@ -3,6 +3,7 @@
   "load": [
     "src/templates/templates-combat.html",
     "src/templates/templates-fishing.html",
+    "src/templates/templates-woodcutting.html",
     "src/templates/styles.css"
   ]
 }

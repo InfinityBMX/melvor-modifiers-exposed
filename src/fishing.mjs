@@ -1,4 +1,4 @@
-export function Fishing(modifiers) {
+export function FishingModifiers(modifiers) {
   return {
     $template: '#fishing-modifiers',
     modifiers,
@@ -44,9 +44,9 @@ export const getFishingModifiers = () => {
     maxReward,
     fishingMasteryModifier: game.fishing.getMasteryXPModifier(),
     fishingXPModifier: game.fishing.getXPModifier(),
-    circletChance: game.fishing.isActive ? game.fishing.getRareDropChance(level, circlet.chance) : 0,
-    stoneChance: game.fishing.isActive ? game.fishing.getRareDropChance(level, stone.chance) : 0,
-    signetChance: game.fishing.isActive ? game.fishing.getRareDropChance(level, signet.chance) : 0,
+    circletChance: game.fishing.isActive && circlet ? game.fishing.getRareDropChance(level, circlet.chance) : 0,
+    stoneChance: game.fishing.isActive && stone ? game.fishing.getRareDropChance(level, stone.chance) : 0,
+    signetChance: game.fishing.isActive && signet ? game.fishing.getRareDropChance(level, signet.chance) : 0,
     chanceForLostChest: game.fishing.chanceForLostChest
   }
 }

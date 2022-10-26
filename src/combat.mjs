@@ -1,4 +1,4 @@
-export function Combat(modifiers) {
+export function CombatModifiers(modifiers) {
   return {
     $template: '#combat-modifiers',
     modifiers,

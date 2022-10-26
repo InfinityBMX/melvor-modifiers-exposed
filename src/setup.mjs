@@ -3,22 +3,27 @@ export async function setup(ctx) {
   // import modules
   const combat = await ctx.loadModule('src/combat.mjs');
   const fishing = await ctx.loadModule('src/fishing.mjs');
+  const woodcutting = await ctx.loadModule('src/woodcutting.mjs');
 
   // load styles
   ctx.loadStylesheet('src/templates/styles.css');
 
-  //
-  const { Combat, getCombatHost, getCombatModifiers } = combat;
-  const { Fishing, getFishingHost, getFishingModifiers } = fishing;
-  // combat modifiers values and setters
+  const { CombatModifiers, getCombatHost, getCombatModifiers } = combat;
+  const { FishingModifiers, getFishingHost, getFishingModifiers } = fishing;
+  const { WoodcuttingModifiers, getWoodcuttingHost, getWoodcuttingModifiers } = woodcutting;
+
+  // app handles
   let combatModifiers,
-    fishingModifiers;
+    fishingModifiers,
+    woodcuttingModifiers;
+  // app flags
   let combatMounted = false;
   let fishingMounted = false;
+  let woodcuttingMounted = false;
 
   ctx.onInterfaceReady(ctx => {
     // combat
-    combatModifiers = Combat(getCombatModifiers());
+    combatModifiers = CombatModifiers(getCombatModifiers());
     try {
       let combatHost = getCombatHost();
       ui.create(combatModifiers, combatHost);
@@ -28,7 +33,7 @@ export async function setup(ctx) {
     }
 
     // fishing
-    fishingModifiers = Fishing(getFishingModifiers());
+    fishingModifiers = FishingModifiers(getFishingModifiers());
     try {
       let fishingHost = getFishingHost();
       ui.create(fishingModifiers, fishingHost);
@@ -37,34 +42,35 @@ export async function setup(ctx) {
       console.error(e);
     }
 
+    // woodcutting
+    woodcuttingModifiers = WoodcuttingModifiers(getWoodcuttingModifiers());
+    try {
+      let woodcuttingHost = getWoodcuttingHost();
+      ui.create(woodcuttingModifiers, woodcuttingHost);
+      woodcuttingMounted = true;
+    } catch (e) {
+      console.error(e);
+    }
+
     // Update values when modifiers recalculated
     ctx.patch(Player, 'computeModifiers').after(() => {
-      const modifiers = getCurrentModifiers();
       if (combatMounted)
         combatModifiers.updateModifiers(getCombatModifiers());
       if (fishingMounted)
         fishingModifiers.updateModifiers(getFishingModifiers());
+      if (woodcuttingMounted)
+        woodcuttingModifiers.updateModifiers(getWoodcuttingModifiers());
     });
+
+    // Update woodcutting when switching trees
+    ctx.patch(Woodcutting, 'selectTree').after(() => {
+      if (woodcuttingMounted)
+        woodcuttingModifiers.updateModifiers(getWoodcuttingModifiers());
+    })
+    // Update woodcutting if Pool Bonus goes up or down
+    ctx.patch(Woodcutting, 'onMasteryPoolBonusChange').after(() => {
+      if (woodcuttingMounted)
+        woodcuttingModifiers.updateModifiers(getWoodcuttingModifiers());
+    })
   })
-}
-
-function getCurrentModifiers() {
-  const {
-    getGPForDamageMultiplier // unbound method
-  } = game.modifiers;
-  const boundGPMulti = getGPForDamageMultiplier.bind(game.modifiers);
-
-  return {
-    meleeGPMulti: boundGPMulti('melee') / 10,
-    rangedGPMulti: boundGPMulti('ranged') / 10,
-    magicGPMulti: boundGPMulti('magic') / 10,
-    ammoPreservationChance: game.modifiers.ammoPreservationChance,
-    runePreservationChance: game.modifiers.runePreservationChance,
-    combatLootDoubleChance: game.modifiers.combatLootDoubleChance,
-    increasedCombatGP: game.modifiers.increasedCombatGP,
-    chanceForLostChest: game.fishing.chanceForLostChest,
-    chanceForExtraFish: game.fishing.chanceForOneExtraFish,
-    fishingMasteryModifier: game.fishing.getMasteryXPModifier(),
-    fishingXPModifier: game.fishing.getXPModifier()
-  }
 }
