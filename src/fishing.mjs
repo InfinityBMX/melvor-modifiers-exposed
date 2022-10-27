@@ -23,35 +23,41 @@ export const getFishingHost = () => {
 }
 
 export const getFishingModifiers = () => {
+  let stoneChance = 0;
+  let circletChance = 0;
+  let signetChance = 0;
   const signet = game.fishing.rareDrops.find(drop => drop.item.id === 'melvorD:Gold_Topaz_Ring');
   const circlet = game.fishing.rareDrops.find(drop => drop.item.id === 'melvorD:Circlet_of_Rhaelyx');
   const stone = game.fishing.rareDrops.find(drop => drop.item.id === 'melvorD:Mysterious_Stone');
   const level = game.fishing.isActive ? game.fishing.actionLevel : 0;
-  const chanceForExtraFish = game.fishing.chanceForOneExtraFish;
-  const extraResource = game.modifiers.getSkillModifierValue('increasedChanceAdditionalSkillResource', game.fishing)
-    - game.modifiers.getSkillModifierValue('decreasedChanceAdditionalSkillResource', game.fishing);
-  const doublingChance = game.fishing.getDoublingChance();
+  const chanceForExtraFish = convert(game.fishing.chanceForOneExtraFish);
+  const extraResource = convert(game.modifiers.getSkillModifierValue('increasedChanceAdditionalSkillResource', game.fishing)
+    - game.modifiers.getSkillModifierValue('decreasedChanceAdditionalSkillResource', game.fishing));
+  const doublingChance = convert(game.fishing.getDoublingChance());
   const doubleRewards = game.modifiers.getSkillModifierValue('doubleItemsSkill', game.fishing);
   // Mastery 99 doubles base reward. Below 99 is 40% of mastery level
-  const base2Fish = game.fishing.isActive ? (game.fishing.masteryLevel >= 99 ? 1 : game.fishing.masteryLevel * 0.4) : 0;
+  const base2Fish = convert(game.fishing.isActive ? (game.fishing.masteryLevel >= 99 ? 1 : game.fishing.masteryLevel * 0.4) : 0);
   const maxReward = (base2Fish > 0 ? 2 : 1) * (doublingChance > 0 ? 2 : 1) * Math.pow(2, doubleRewards) + (extraResource > 0 ? 1 : 0) + (chanceForExtraFish > 0 ? 1 : 0);
+  if (game.fishing.isActive) {
+    stoneChance = convert(stone && game.checkRequirements(stone.requirements) ? game.fishing.getRareDropChance(level, stone.chance) : 0);
+    circletChance = convert(circlet ? game.fishing.getRareDropChance(level, circlet.chance) : 0);
+    signetChance = convert(signet && game.modifiers.allowSignetDrops ? game.fishing.getRareDropChance(level, signet.chance) : 0);
+  }
+
   return {
     base2Fish,
     doublingChance,
     doubleRewards: doubleRewards ? 'Yes' : 'No',
-    extraResource: extraResource,
+    extraResource,
     chanceForExtraFish,
     maxReward,
-    fishingMasteryModifier: game.fishing.getMasteryXPModifier(),
-    fishingXPModifier: game.fishing.getXPModifier(),
-    circletChance: game.fishing.isActive && circlet ? game.fishing.getRareDropChance(level, circlet.chance) : 0,
-    stoneChance: game.fishing.isActive && stone ? game.fishing.getRareDropChance(level, stone.chance) : 0,
-    signetChance: game.fishing.isActive && signet ? game.fishing.getRareDropChance(level, signet.chance) : 0,
-    chanceForLostChest: game.fishing.chanceForLostChest
+    fishingMasteryModifier: convert(game.fishing.getMasteryXPModifier()),
+    fishingXPModifier: convert(game.fishing.getXPModifier()),
+    circletChance,
+    stoneChance,
+    signetChance,
+    chanceForLostChest: convert(game.fishing.chanceForLostChest)
   }
 }
 
-
-
-
-
+const convert = (number) => +number.toFixed(5)

@@ -59,7 +59,7 @@ export const getWoodcuttingModifiers = () => {
     xPModifier: skill.getXPModifier(),
     circletChance: skill.isActive && circlet ? skill.getRareDropChance(level, circlet.chance) : 0,
     stoneChance: skill.isActive && stone ? skill.getRareDropChance(level, stone.chance) : 0,
-    signetChance: skill.isActive && signet ? skill.getRareDropChance(level, signet.chance).toFixed(5) : 0,
+    signetChance: skill.isActive && signet && game.modifiers.allowSignetDrops ? skill.getRareDropChance(level, signet.chance).toFixed(5) : 0,
   }
 }
 

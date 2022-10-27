@@ -1,0 +1,18 @@
+<!-- templates.html -->
+<template id="modifiers-block">
+    <div class="col-12">
+        <div class="block block-rounded">
+            <div class="row no-gutters">
+                <div class="col-12">
+                    <div class="block-content block-content-full flexy nowrap content-justified">
+                        <template v-for="modifier in modifiers" :key="modifier.id">
+                            <span class="font-w400 font-size-sm mr-2 content-item text-success padded" v-show="modifier.show">
+                                {{ modifier.label }}: {{ modifier.value }}
+                            </span>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
