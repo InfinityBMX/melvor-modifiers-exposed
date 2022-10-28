@@ -5,6 +5,7 @@ export async function setup(ctx) {
   const fishing = await ctx.loadModule('src/fishing.mjs');
   const woodcutting = await ctx.loadModule('src/woodcutting.mjs');
   const firemaking  = await ctx.loadModule('src/firemaking.mjs');
+  const mining = await ctx.loadModule('src/mining.mjs');
 
   // load styles
   ctx.loadStylesheet('src/templates/styles.css');
@@ -13,17 +14,20 @@ export async function setup(ctx) {
   const { FishingModifiers, getFishingHost, getFishingModifiers } = fishing;
   const { WoodcuttingModifiers, getWoodcuttingHost, getWoodcuttingModifiers } = woodcutting;
   const { FiremakingModifiers, getFiremakingHost, getFiremakingModifiers } = firemaking;
+  const { MiningModifiers, getMiningHost, getMiningModifiers } = mining;
 
   // app handles
   let combatModifiers,
     fishingModifiers,
     woodcuttingModifiers,
-    firemakingModifiers;
+    firemakingModifiers,
+    miningModifiers;
   // app flags
   let combatMounted = false;
   let fishingMounted = false;
   let woodcuttingMounted = false;
   let firemakingMounted = false;
+  let miningMounted = false;
 
   const refresh = () => {
     if (combatMounted)
@@ -34,6 +38,8 @@ export async function setup(ctx) {
       woodcuttingModifiers.updateModifiers(getWoodcuttingModifiers());
     if (firemakingMounted)
       firemakingModifiers.updateModifiers(getFiremakingModifiers());
+    if (miningMounted)
+      miningModifiers.updateModifiers(getMiningModifiers());
   }
 
   ctx.onInterfaceReady(ctx => {
@@ -73,6 +79,16 @@ export async function setup(ctx) {
       let firemakingHost = getFiremakingHost();
       ui.create(firemakingModifiers, firemakingHost);
       firemakingMounted = true;
+    } catch (e) {
+      console.error(e);
+    }
+
+    // mining
+    miningModifiers = MiningModifiers(getMiningModifiers());
+    try {
+      let miningHost = getMiningHost();
+      ui.create(miningModifiers, miningHost);
+      miningMounted = true;
     } catch (e) {
       console.error(e);
     }
